@@ -19,7 +19,7 @@ async function run(): Promise<void> {
 
     const s3 = new AWS.S3();
 
-    await exec.exec(`tar cjf ${fileName} ${paths}`);
+    await exec.exec(`zsh -c "tar cjf ${fileName} ${paths}"`);
 
     s3.upload({
         Body: fs.readFileSync(fileName),
