@@ -1,25 +1,23 @@
 # actions-s3-cache
 
-This action installs dependencies or builds, and caches them in S3.
+This action cache files in S3. A `key` determines a set of files to load and unload. The `key` will be the name of a
+file that's uploaded to S3.
 
 ## Usage
 
 ```yaml
 steps:
   - uses: actions/checkout@v2
-  - uses: shonansurvivors/actions-s3-cache@v1.0.1
+  - uses: bitnomial/actions-s3-cache@v1.0.1
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: us-east-1
     with:
       s3-bucket: your-s3-bucket-name # required
-      cache-key: npm-v1-${{ hashFiles('laravel/package-lock.json') }} # required ('.zip' is unnecessary)
+      key: npm-v1-${{github.base_ref}}-${{ hashFiles('laravel/package-lock.json') }} # required
       paths: node_modules # required 
-      command: npm ci # required
-      zip-option: -ryq # optional (default: -ryq)
-      unzip-option: -n # optional (default: -n)
-      working-directory: laravel # optional (default: ./)
+      dir: ~ # Not required! Defaults to workspace
 ```
 
 ## IAM Policy Example
@@ -46,4 +44,4 @@ steps:
 ```
 ## License
 
-[MIT License](https://github.com/shonansurvivors/actions-s3-cache/blob/master/LICENCE) - Copyrights (c) 2020 shonansurvivors
+[MIT License](https://github.com/bitnomial/actions-s3-cache/blob/master/LICENCE) - Copyrights (c) 2020 shonansurvivors, Bitnomial

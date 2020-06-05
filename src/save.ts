@@ -11,6 +11,9 @@ async function run(): Promise<void> {
     const paths = core.getInput('paths', { required: true });
     const fileName = cacheKey + '.tar.bz2';
 
+    const dir = core.getInput('dir', { required: false });
+    process.chdir(dir);
+
     const s3 = new AWS.S3();
 
     await exec.exec(`tar cjf ${fileName} ${paths}`);

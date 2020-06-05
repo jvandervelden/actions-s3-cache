@@ -10,6 +10,9 @@ async function run(): Promise<void> {
     const cacheKey = core.getInput('key', { required: true });
     const tarball = cacheKey + '.tar.bz2';
 
+    const dir = core.getInput('dir', { required: false });
+    process.chdir(dir);
+
     const s3 = new AWS.S3();
 
     s3.getObject({
