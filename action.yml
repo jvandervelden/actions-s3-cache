@@ -9,8 +9,11 @@ inputs:
     description: 'A key for storing and restoring the cache'
     required: true
   paths:
-    description: 'A list of files, directories, and patterns to cache and restore'
+    description: 'A space-separated list of files, directories, and patterns to cache and restore'
     required: true
+  dir:
+    description: 'Directory to move to for paths'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/restore/index.js'
