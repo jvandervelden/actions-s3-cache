@@ -23,7 +23,7 @@ async function run(): Promise<void> {
         Key: tarball
       }, async (err, data) => {
         if (err) {
-          core.info(`No cache is found for key: ${tarball}`);
+          core.info(`No cache found for key: ${tarball}`);
         } else {
           core.info(`Found a cache for key: ${tarball}`);
           fs.writeFileSync(tarball, data.Body);

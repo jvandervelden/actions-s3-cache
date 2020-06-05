@@ -11,6 +11,7 @@
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
+    "@actions/glob": "^0.1.0",
     "aws-sdk": "^2.654.0"
   },
   "devDependencies": {
