@@ -5,7 +5,7 @@ import * as path from "path";
 import * as fs from "fs";
 import * as AWS from "aws-sdk";
 
-export async function resolvePaths(dir: string, patterns: string[]): Promise<string[]> {
+export async function resolvePaths(dir: string, patterns: string[]): Promise<string> {
   const paths: string[] = [];
   const workspace = dir ?? process.env['GITHUB_WORKSPACE'] ?? process.cwd();
   const globber = await glob.create(patterns.join('\n'), {
@@ -19,7 +19,7 @@ export async function resolvePaths(dir: string, patterns: string[]): Promise<str
     paths.push(`${relativeFile}`);
   }
 
-  return paths
+  return paths.join(' ');
 }
 
 function getInputAsArray(
