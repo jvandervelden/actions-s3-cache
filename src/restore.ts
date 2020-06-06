@@ -8,7 +8,7 @@ async function run(): Promise<void> {
   try {
     const s3Bucket = core.getInput('s3-bucket', { required: true });
     const cacheKey = core.getInput('key', { required: true });
-    const tarball = cacheKey + '.tar.bz2';
+    const tarball = cacheKey + '.tar.zst';
 
     const dir = core.getInput('dir', { required: false });
     core.info(`Dir: ${dir}`);
@@ -28,7 +28,7 @@ async function run(): Promise<void> {
           core.info(`Found a cache for key: ${tarball}`);
           fs.writeFileSync(tarball, data.Body);
 
-          await exec.exec(`tar xjf ${tarball}`);
+          await exec.exec(`tar --use-compress-program unzstd -xf ${tarball}`);
           await exec.exec(`rm -f ${tarball}`);
         }
     });
