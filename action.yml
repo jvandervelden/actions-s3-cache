@@ -11,6 +11,10 @@ inputs:
   paths:
     description: 'A list of files, directories, and patterns to cache and restore'
     required: true
+  compression:
+    description: 'Specify the compression to use in tar'
+    required: true
+    default: 'bzip2'
 runs:
   using: 'node12'
   main: 'dist/restore/index.js'

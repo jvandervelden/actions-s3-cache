@@ -2,16 +2,16 @@ import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as AWS from "aws-sdk";
 import * as fs from "fs";
+import { CompressionType, getCompressionType } from "./compression";
 
 async function run(): Promise<void> {
 
   try {
     const s3Bucket = core.getInput('s3-bucket', { required: true });
     const cacheKey = core.getInput('key', { required: true });
-    const tarball = cacheKey + '.tar.bz2';
-
-    const dir = core.getInput('dir', { required: false });
-    process.chdir(dir);
+    const compression = core.getInput('compression', { required: true });
+    const compressionType: CompressionType = getCompressionType(compression);
+    const tarball = `${cacheKey}.tar.${compressionType.fileExt}`;
 
     const s3 = new AWS.S3();
 
@@ -25,7 +25,7 @@ async function run(): Promise<void> {
           core.info(`Found a cache for key: ${tarball}`);
           fs.writeFileSync(tarball, data.Body);
 
-          await exec.exec(`tar xjf ${tarball}`);
+          await exec.exec(`tar ${compressionType.tarOption} -xf ${tarball}`);
           await exec.exec(`rm -f ${tarball}`);
         }
     });

@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as AWS from "aws-sdk";
 import * as fs from "fs";
+import { CompressionType, getCompressionType } from "./compression";
 
 async function run(): Promise<void> {
 
@@ -9,14 +10,13 @@ async function run(): Promise<void> {
     const s3Bucket = core.getInput('s3-bucket', { required: true });
     const cacheKey = core.getInput('key', { required: true });
     const paths = core.getInput('paths', { required: true });
-    const fileName = cacheKey + '.tar.bz2';
-
-    const dir = core.getInput('dir', { required: false });
-    process.chdir(dir);
-
+    const compression = core.getInput('compression', { required: true });
+    const compressionType: CompressionType = getCompressionType(compression);
+    const fileName = `${cacheKey}.tar.${compressionType.fileExt}`;
+    
     const s3 = new AWS.S3();
 
-    await exec.exec(`tar cjf ${fileName} ${paths}`);
+    await exec.exec(`tar ${compressionType.tarOption} -cf ${fileName} ${paths}`);
 
     s3.upload({
         Body: fs.readFileSync(fileName),
